@@ -1,34 +1,91 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width" />
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Styles.Render("~/Content/themes/base/css")
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <style type="text/css">
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        /* Custom container */
+        .container-narrow {
+            margin: 0 auto;
+            max-width: 700px;
+        }
+
+            .container-narrow > hr {
+                margin: 30px 0;
+            }
+
+        /* Main marketing message and sign up button */
+        .jumbotron {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+            .jumbotron h1 {
+                font-size: 72px;
+                line-height: 1;
+            }
+
+            .jumbotron .btn {
+                font-size: 21px;
+                padding: 14px 24px;
+            }
+
+        /* Supporting marketing content */
+        .marketing {
+            margin: 40px 0;
+        }
+
+            .marketing p + h4 {
+                margin-top: 28px;
+            }
+
+        .center {
+            text-align: center;
+        }
+
+        /**
+        * Extra large button extensions. Extends `.btn`.
+        */
+        .btn-xlarge {
+            padding: 18px 28px;
+            font-size: 22px;
+            line-height: normal;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+    </style>
+
 </head>
 <body>
-    <header>
-        <div id="userSettings">
-            @Html.Partial("_UserSettings")
-        </div>
-        <p>@ViewBag.Title</p>
-    </header>
+    <div class="container-narrow">
 
-    <div id="body">
-        @RenderBody()
+    <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+            <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+            <li class="active">@Html.ActionLink("About", "Index", "About")</li>
+        </ul>
+        <h3 class="muted">Tweet Fighter</h3>
     </div>
 
-    <footer>
-        <p>Learn more about <a href="http://www.asp.net/single-page-application">Single Page Applications</a></p>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-    </footer>
+    <hr>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/ajaxlogin")
+    @RenderBody()
+
+</div>
+<!-- /container -->
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
