@@ -55,6 +55,25 @@
     <hr>
 
     history
+    <div class="row-fluid marketing">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Contender 1</th>
+              <th>Vs</th>
+              <th>Contender 2</th>
+            </tr>
+          </thead>
+          <tbody data-bind="foreach: fightHistory">
+            <tr>
+              <td><span data-bind="text: firstEntry.searchTerm()"></span> <span data-bind="visible: firstEntry.winner()"><i class="icon-ok"></i></span></td>
+              <td></td>
+              <td><span data-bind="text: secondEntry.searchTerm()"></span> <span data-bind="visible: secondEntry.winner()"><i class="icon-ok"></i></span></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    
 
     <hr>
 
@@ -64,7 +83,7 @@
 
 <script type='text/javascript'>
 
-    var maxPageNumber = 2;
+    var maxPageNumber = 3;
     var numberPerPage = 100;
     var tweetVariance = 50;
     var timer;
@@ -112,14 +131,22 @@
         };
     }
 
+    //This is our main view model. It holds all the important information. 
     var TweetFightViewModel = function () {
         var self = this;
         self.firstEntry = ko.observable(new FightEntry("test"));
         self.secondEntry = ko.observable(new FightEntry("azure"));
         self.dateSubmitted = new Date();
-        // Operations
+        self.fightHistory = ko.observableArray();
+
+        // Compare the two terms listed
         self.compareTerms = function () {
             //validate all is ok and do searches
+            if (isBlank(self.firstEntry().searchTerm()) || isBlank(self.firstEntry().searchTerm())) {
+                alert("You must enter a term in both fields.");
+                return;
+            }
+
             self.dateSubmitted = new Date();
 
             self.firstEntry().loadTweetStatistics();
@@ -208,7 +235,8 @@
     }
 
     // Activates knockout.js for the view binding
-    ko.applyBindings(new TweetFightViewModel());
+    var tweetFightModel = new TweetFightViewModel();
+    ko.applyBindings(tweetFightModel);
 
 
     //Twitter search api helper
@@ -284,8 +312,8 @@
         }
     }
 
+    //Realtime Communication via SignalR
     var clipHub; //holds global reference to our SignalR hub
-
     $(document).ready(function () {
         // Proxy created on the fly based on the script include above. 
         $.connection.hub.logging = true; 
@@ -295,15 +323,20 @@
         // Declare a function on the chat hub so the server can invoke it          
         clipHub.client.newFightEntry = function (newTweetFight) {
             //add to knockout array
+            var viewModel = ko.mapping.fromJS(newTweetFight);
+
+            tweetFightModel.fightHistory.push(viewModel);
             //alert(newTweetFight);
         };
 
         $.connection.hub.start()
-            .done(function () {
-                
-            })
             .fail(function () {
-                alert("Could not Connect!");
+                alert("Could not connect to backend storage!");
             });
     });
+
+    //helper function
+    function isBlank(str) {
+        return (!str || /^\s*$/.test(str));
+    }
  </script>
