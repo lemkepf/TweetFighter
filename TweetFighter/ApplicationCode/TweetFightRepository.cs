@@ -29,7 +29,8 @@ namespace TweetFighter.ApplicationCode
 
             if (clips != null)
             {
-                return clips.OrderByDescending(c => c.dateSubmitted).Take(howMany).ToList<TweetFight>();
+                //return clips.OrderByDescending(c => c.dateSubmitted).Take(howMany).ToList<TweetFight>();
+                return null ;
             }
             else
             {

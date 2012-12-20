@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,6 +23,14 @@ namespace TweetFighter
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //Setup automapper
+            Mapper.CreateMap<TweetFighter.Models.TweetFight, TweetFighter.ApplicationCode.TweetFightPOCO>();
+            Mapper.CreateMap<TweetFighter.ApplicationCode.TweetFightPOCO, TweetFighter.Models.TweetFight>();
+
+            Mapper.CreateMap<TweetFighter.Models.FightEntry, TweetFighter.ApplicationCode.FightEntryPOCO>();
+            Mapper.CreateMap<TweetFighter.ApplicationCode.FightEntryPOCO, TweetFighter.Models.FightEntry>();
+
         }
     }
 }

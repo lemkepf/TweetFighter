@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="/signalr/hubs" type="text/javascript"></script>
+
     <div class="jumbotron">
         <h1>Fight your tweets!</h1>
         <p class="lead">Pit one search term versus another and see which is more popular on Twitter</p>
@@ -114,17 +116,17 @@
         var self = this;
         self.firstEntry = ko.observable(new FightEntry("test"));
         self.secondEntry = ko.observable(new FightEntry("azure"));
-
+        self.dateSubmitted = new Date();
         // Operations
         self.compareTerms = function () {
             //validate all is ok and do searches
+            self.dateSubmitted = new Date();
 
             self.firstEntry().loadTweetStatistics();
             self.secondEntry().loadTweetStatistics();
 
             //setup timer to see if they are both done. 
             timer = setInterval(self.populateView, 10);
-
         };
 
         self.populateView = function () {
@@ -193,17 +195,19 @@
             }
 
             self.addToHistory = function () {
-                //save for postarity
-
-
+                //save for postarity using SignalR. 
+                //parse the existing Knockout objects into JSON Strings, then create a plain JavaScript object out of it. 
+                //This is mainly a limitation of SignalR in that it needs plain JSON, not KnockOut objects. 
+                var viewModelInJson = ko.toJSON(this);
+                viewModelInJson = jQuery.parseJSON(viewModelInJson)
+                clipHub.server.addFightEntry(viewModelInJson);
             }
         }
 
         //history of fights?
-        //hashmap of term1, term2?
     }
 
-    // Activates knockout.js for the view
+    // Activates knockout.js for the view binding
     ko.applyBindings(new TweetFightViewModel());
 
 
@@ -279,4 +283,27 @@
             self.getTotalTweetsPerPage(nextPageNumber);
         }
     }
+
+    var clipHub; //holds global reference to our SignalR hub
+
+    $(document).ready(function () {
+        // Proxy created on the fly based on the script include above. 
+        $.connection.hub.logging = true; 
+
+        clipHub = $.connection.tweetFightHub;
+
+        // Declare a function on the chat hub so the server can invoke it          
+        clipHub.client.newFightEntry = function (newTweetFight) {
+            //add to knockout array
+            //alert(newTweetFight);
+        };
+
+        $.connection.hub.start()
+            .done(function () {
+                
+            })
+            .fail(function () {
+                alert("Could not Connect!");
+            });
+    });
  </script>
