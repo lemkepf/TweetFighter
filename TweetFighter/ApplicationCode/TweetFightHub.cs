@@ -36,6 +36,17 @@ namespace TweetFighter.ApplicationCode
             }
         }
 
+        public override Task OnConnected()
+        {
+            //load the last 10 and send to the client. 
+
+            List<TweetFight> fightListEntity = db.GetPreviousFightsDescending(10);
+
+            List<TweetFightPOCO> fightList = Mapper.Map<List<TweetFight>, List<TweetFightPOCO>>(fightListEntity);
+
+            return Clients.Caller.loadHistory(fightList);
+        }
+
     }
 
     //This is some trickery to deal with SignalR not liking a non-POCO object. 

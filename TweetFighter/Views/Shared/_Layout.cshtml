@@ -6,86 +6,35 @@
     <title>@ViewBag.Title</title>
 
     @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/site")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-
-    <style type="text/css">
-        body {
-            padding-top: 20px;
-            padding-bottom: 40px;
-        }
-
-        /* Custom container */
-        .container-narrow {
-            margin: 0 auto;
-            max-width: 700px;
-        }
-
-            .container-narrow > hr {
-                margin: 30px 0;
-            }
-
-        /* Main marketing message and sign up button */
-        .jumbotron {
-            margin: 40px 0;
-            text-align: center;
-        }
-
-            .jumbotron h1 {
-                font-size: 72px;
-                line-height: 1;
-            }
-
-            .jumbotron .btn {
-                font-size: 21px;
-                padding: 14px 24px;
-            }
-
-        /* Supporting marketing content */
-        .marketing {
-            margin: 40px 0;
-        }
-
-            .marketing p + h4 {
-                margin-top: 28px;
-            }
-
-        .center {
-            text-align: center;
-        }
-
-        /**
-        * Extra large button extensions. Extends `.btn`.
-        */
-        .btn-xlarge {
-            padding: 18px 28px;
-            font-size: 22px;
-            line-height: normal;
-            -webkit-border-radius: 8px;
-            -moz-border-radius: 8px;
-            border-radius: 8px;
-        }
-    </style>
-
 </head>
 <body>
     <div class="container-narrow">
 
-    <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-            <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
-            <li class="active">@Html.ActionLink("About", "Index", "About")</li>
-        </ul>
-        <h3 class="muted">Tweet Fighter</h3>
+        <div class="masthead">
+            <ul class="nav nav-pills pull-right">
+                <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
+                <li class="active">@Html.ActionLink("About", "About", "Home")</li>
+            </ul>
+            <h3 class="muted">Tweet Fighter!</h3>
+        </div>
+
+        <hr>
+
+        @RenderBody()
+        
+        <hr>
+
+        <div class="footer">
+            <p>&copy; Nobody in particular 2012</p>
+        </div>
     </div>
 
-    <hr>
-
-    @RenderBody()
-
-</div>
-<!-- /container -->
-
     @RenderSection("scripts", required: false)
+
+    <!-- Hey, you checking out my HTML? Cool. I'd love to see how close you guys looked at this. -->
+
 </body>
 </html>

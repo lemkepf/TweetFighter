@@ -1,61 +1,60 @@
 ﻿body {
-    font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #fff;
+    padding-top: 20px;
+    padding-bottom: 40px;
 }
 
-header, footer, nav, section {
-    display: block;
+/* The narrow container */
+.container-narrow {
+    margin: 0 auto;
+    max-width: 700px;
 }
 
-
-/* Styles for basic forms
------------------------------------------------------------*/
-fieldset {
-    border: 1px solid #ddd;
-    padding: 0 1.4em 1.4em 1.4em;
-    margin: 0 0 1.5em 0;
+.container-narrow > hr {
+    margin: 30px 0;
 }
 
-legend {
-    font-size: 1.2em;
-    font-weight: bold;
+/* Main marketing  */
+.mainMessage {
+    margin: 40px 0;
+    text-align: center;
 }
 
-textarea {
-    min-height: 75px;
+    .mainMessage h1 {
+        font-size: 72px;
+        line-height: 1;
+    }
+
+    .mainMessage .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+    }
+
+/* Supporting marketing content */
+.top-row {
+    margin: 40px 0;
 }
 
-.editor-label {
-    margin: 1em 0 0 0;
+    .top-row p + h4 {
+        margin-top: 28px;
+    }
+
+.centerAlign {
+    text-align: center;
 }
 
-.editor-field {
-    margin: 0.5em 0 0 0;
+.rightAlign {
+    text-align: right;
 }
 
-
-/* Styles for validation helpers
------------------------------------------------------------*/
-.field-validation-error {
-    color: #f00;
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 22px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 
-.field-validation-valid {
-    display: none;
-}
-
-.input-validation-error {
-    border: 1px solid #f00;
-    background-color: #fee;
-}
-
-.validation-summary-errors {
-    font-weight: bold;
-    color: #f00;
-}
-
-.validation-summary-valid {
-    display: none;
+.winningTerm {
+    color: #008000;
 }

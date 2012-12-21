@@ -23,20 +23,13 @@ namespace TweetFighter.Controllers
             return View();
         }
 
-        //
-        // GET: /Home/Fight/termOne/termTwo
-
-        public ActionResult Fight(string termOne, string termTwo)
-        {
-            return View();
-        }
-
+        
         [HttpPost]
         public ActionResult Fight(FormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
+                // TODO: Add insert logic here to handle posting without javascript. Not... enough... time....
 
                 return RedirectToAction("Index");
             }

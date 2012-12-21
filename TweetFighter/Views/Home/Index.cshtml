@@ -7,336 +7,96 @@
 
 <script src="/signalr/hubs" type="text/javascript"></script>
 
-    <div class="jumbotron">
-        <h1>Fight your tweets!</h1>
-        <p class="lead">Pit one search term versus another and see which is more popular on Twitter</p>
-    </div>
+<div class="mainMessage">
+    <h3>Pit one search term against another and see which is more popular on Twitter!</h3>
+</div>
 
-    @using (Html.BeginForm(null, null, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal form-signin" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
+@using (Html.BeginForm(null, null, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal form-signin" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
     
-        <div class="row-fluid marketing">
-            <div class="span5">
-                <h4>Contender 1</h4>
-                @Html.TextBoxFor(m => m.firstEntry.searchTerm, new { @class = "input-block-level", placeholder = "Boats", data_bind="value: firstEntry().searchTerm" })
-                @Html.ValidationMessageFor(m => m.firstEntry.searchTerm)
+    <div class="row-fluid top-row">
+        <div class="span5 centerAlign">
+            <h4>Contender 1</h4>
+            @Html.TextBoxFor(m => m.firstEntry.searchTerm, new { @class = "input-block-level", placeholder = "Boats", data_bind = "value: firstEntry().searchTerm" })
+            @Html.ValidationMessageFor(m => m.firstEntry.searchTerm)
 
-            </div>
-
-            <div class="span2 center">
-                <h1>VS</h1>
-            </div>
-
-            <div class="span5">
-                <h4>Contender 2</h4>
-                @Html.TextBoxFor(m => m.secondEntry.searchTerm, new { @class = "input-block-level", placeholder = "Planes", data_bind="value: secondEntry().searchTerm" })
-                @Html.ValidationMessageFor(m => m.secondEntry.searchTerm)
-            </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12 center">
-                <button type="submit"  data-bind="click: compareTerms" class="btn btn-primary btn-xlarge">Fight!</button>
-            </div>
+
+        <div class="span2 centerAlign">
+            <h1>VS</h1>
         </div>
+
+        <div class="span5 centerAlign">
+            <h4>Contender 2</h4>
+            @Html.TextBoxFor(m => m.secondEntry.searchTerm, new { @class = "input-block-level", placeholder = "Planes", data_bind = "value: secondEntry().searchTerm" })
+            @Html.ValidationMessageFor(m => m.secondEntry.searchTerm)
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span5 centerAlign">
+            <h4>Contender 1: <span data-bind="text: firstEntry().searchTerm"></span></h4>
+            Tweets Per Minute: <span data-bind="text: firstEntry().tweetsPerMinute"></span>
+            <h2 class="winningTerm" data-bind="visible: firstEntry().winner()">Winner!</h2>
+        </div>
+
+        <div id="graphPlaceholder" class="span2 centerAlign" style="min-height: 100px;">
+        </div>
+
+        <div class="span5 centerAlign">
+            <h4>Contender 2: <span data-bind="text: secondEntry().searchTerm"></span></h4>
+            Tweets Per Minute: <span data-bind="text: secondEntry().tweetsPerMinute"></span>
+            <h2 class="winningTerm" data-bind="visible: secondEntry().winner()">Winner!</h2>
+        </div>
+    </div>
+        
+    <div class="row-fluid">
+        <div class="span12 centerAlign">
+            <button type="submit" data-bind="click: compareTerms" class="btn btn-primary btn-xlarge">Fight!</button>
+        </div>
+    </div>
              
-    }
-    graph of the fight
+}
 
-    <div>First Total tweets: </div><span data-bind="text: firstEntry().totalTweets"></span>
-    <div>Second Total tweets: </div><span data-bind="text: secondEntry().totalTweets"></span>
-    <div>First Total per minute: </div><span data-bind="text: firstEntry().tweetsPerMinute"></span>
-    <div>Second Total per minute: </div><span data-bind="text: secondEntry().tweetsPerMinute"></span>
-    <br />
-    <div id="loading" style="display:none;">Loading!</div>
-    <div id="pagesDone" style="display:none;">Pages done: <span></span></div>
+<hr>
 
-    <hr>
-
-    history
-    <div class="row-fluid marketing">
-        <table class="table table-striped table-hover">
-            <thead>
+<h2>Previous Fights</h2>
+<div class="row-fluid top-row">
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-              <th>Contender 1</th>
-              <th>Vs</th>
-              <th>Contender 2</th>
+                <th>Time</th>
+                <th>Contender 1</th>
+                <th></th>
+                <th>VS</th>
+                <th></th>
+                <th>Contender 2</th>
             </tr>
-          </thead>
-          <tbody data-bind="foreach: fightHistory">
+        </thead>
+        <tbody data-bind="foreach: fightHistory">
             <tr>
-              <td><span data-bind="text: firstEntry.searchTerm()"></span> <span data-bind="visible: firstEntry.winner()"><i class="icon-ok"></i></span></td>
-              <td></td>
-              <td><span data-bind="text: secondEntry.searchTerm()"></span> <span data-bind="visible: secondEntry.winner()"><i class="icon-ok"></i></span></td>
+                <td>
+                    <span data-bind="date: dateSubmitted"></span>
+                </td>
+                <td data-bind="css: { winningTerm: firstEntry.winner() }">
+                    <span data-bind="text: firstEntry.searchTerm()"></span>
+                    <br />
+                    TPM: <span data-bind="text: firstEntry.tweetsPerMinute()"></span>
+                </td>
+                <td>
+                    <span data-bind="visible: firstEntry.winner()"><i class="icon-ok"></i></span>
+                </td>
+                <td></td>
+                <td>
+                    <span data-bind="visible: secondEntry.winner()"><i class="icon-ok"></i></span>
+                </td>
+                <td data-bind="css: { winningTerm: secondEntry.winner() }">
+                    <span data-bind="text: secondEntry.searchTerm()"></span>
+                    <br />
+                    TPM: <span data-bind="text: secondEntry.tweetsPerMinute()"></span>
+                </td>
             </tr>
-          </tbody>
-        </table>
-    </div>
-    
-
-    <hr>
-
-    <div class="footer">
-        <p>&copy; Nobody in particular 2012</p>
-    </div>
-
-<script type='text/javascript'>
-
-    var maxPageNumber = 3;
-    var numberPerPage = 100;
-    var tweetVariance = 50;
-    var timer;
-
-    // This is a simple viewmodel - JavaScript that defines the data and behavior of the UI
-    // Class to represent one side of a FightEntry 
-    var FightEntry = function (searchTermIn) {
-        var self = this;
-        self.searchTerm = ko.observable(searchTermIn);
-        self.totalTweets = ko.observable(0);
-        self.oldestTweetDate = ko.observable(new Date());
-        self.tweetsPerMinute = ko.observable(0);
-        self.loading = ko.observable(false);
-        self.winner = ko.observable(false);
-
-        self.encodedSearchTerm = ko.computed(function () {
-            return encodeURIComponent(self.searchTerm());
-        });
-
-        self.encodedSearchTerm = ko.computed(function () {
-            return encodeURIComponent(self.searchTerm());
-        });
-
-        // Operations
-        self.loadTweetStatistics = function () {
-            //get tweet statistics for this entry. 
-            self.loading(true);
-            //reset stats
-            self.totalTweets(0);
-            self.oldestTweetDate(new Date());
-            self.tweetsPerMinute(0);
-
-            var twitterHelper = new TwitterSearchHelper();
-            twitterHelper.getTotalTweets(self.encodedSearchTerm(), self.totalTweets, self.oldestTweetDate, self.loading);
-        };
-
-        self.calculateTweetsPerMinute = function () {
-            //calculate tweets per minute. 
-            //get millisecond difference between now and the oldest date. 
-            var dateDiff = Math.abs(new Date() - self.oldestTweetDate());
-            var tweetPerMillis = (self.totalTweets() / dateDiff);
-
-            self.tweetsPerMinute(Math.floor((tweetPerMillis * 1000 * 60) * 10000) / 10000);
-
-        };
-    }
-
-    //This is our main view model. It holds all the important information. 
-    var TweetFightViewModel = function () {
-        var self = this;
-        self.firstEntry = ko.observable(new FightEntry("test"));
-        self.secondEntry = ko.observable(new FightEntry("azure"));
-        self.dateSubmitted = new Date();
-        self.fightHistory = ko.observableArray();
-
-        // Compare the two terms listed
-        self.compareTerms = function () {
-            //validate all is ok and do searches
-            if (isBlank(self.firstEntry().searchTerm()) || isBlank(self.firstEntry().searchTerm())) {
-                alert("You must enter a term in both fields.");
-                return;
-            }
-
-            self.dateSubmitted = new Date();
-
-            self.firstEntry().loadTweetStatistics();
-            self.secondEntry().loadTweetStatistics();
-
-            //setup timer to see if they are both done. 
-            timer = setInterval(self.populateView, 10);
-        };
-
-        self.populateView = function () {
-            if (self.firstEntry().loading() == false && self.secondEntry().loading() == false) {
-                window.clearInterval(timer);
-                var maxResults = (maxPageNumber * numberPerPage) - tweetVariance;
-
-                //Scenario 1: Both results hit their max results. 
-                if (self.firstEntry().totalTweets() > maxResults && self.secondEntry().totalTweets() > maxResults) {
-                    //just calculate tweets per minute for each. 
-                    
-                } else if (self.firstEntry().totalTweets() < maxResults && self.secondEntry().totalTweets() < maxResults) {
-                    //Scenario 2: Both results are less than max. 
-                    //use oldest date and calculate tweets per minute.
-
-                    if (self.firstEntry().oldestTweetDate().getTime() < self.secondEntry().oldestTweetDate().getTime()) {
-                        self.secondEntry().oldestTweetDate(self.firstEntry().oldestTweetDate());
-                    } else {
-                        self.firstEntry().oldestTweetDate(self.secondEntry().oldestTweetDate())
-                    }
-                   
-                } else {
-                    //Scenario 3: one has max results, one does not. 
-
-                    //find one with max results
-                    var maxEntry;
-                    var minEntry;
-                    if (self.firstEntry().totalTweets() > maxResults) {
-                        //first one
-                        maxEntry = self.firstEntry;
-                        minEntry = self.secondEntry;
-                    } else {
-                        //second one
-                        maxEntry = self.secondEntry;
-                        minEntry = self.firstEntry;
-                    }
-
-                    if (maxEntry().oldestTweetDate().getTime() > minEntry().oldestTweetDate().getTime()) {
-                        //Scenario 3.1: maxEntry date is sooner than minEntry date. 
-                        //juse calculate each seperate. 
-
-                    } else {
-                        //Scenario 3.2: maxEntry date is older than minEntry date. 
-                        //use max results date for both calculations. 
-                        minEntry().oldestTweetDate(maxEntry().oldestTweetDate());
-                    }
-                }
-
-                //calculate tweets per minute
-                self.firstEntry().calculateTweetsPerMinute();
-                self.secondEntry().calculateTweetsPerMinute();
-
-                //find winner!
-                if (self.firstEntry().tweetsPerMinute() > self.secondEntry().tweetsPerMinute()) {
-                    self.firstEntry().winner(true);
-                } else if (self.firstEntry().tweetsPerMinute() > self.secondEntry().tweetsPerMinute()) {
-                    self.secondEntry().winner(true);
-                }else{
-                    //tie
-                    self.secondEntry().winner(true);
-                    self.firstEntry().winner(true);
-                }
-
-                //save it to the history
-                self.addToHistory();
-            }
-
-            self.addToHistory = function () {
-                //save for postarity using SignalR. 
-                //parse the existing Knockout objects into JSON Strings, then create a plain JavaScript object out of it. 
-                //This is mainly a limitation of SignalR in that it needs plain JSON, not KnockOut objects. 
-                var viewModelInJson = ko.toJSON(this);
-                viewModelInJson = jQuery.parseJSON(viewModelInJson)
-                clipHub.server.addFightEntry(viewModelInJson);
-            }
-        }
-
-        //history of fights?
-    }
-
-    // Activates knockout.js for the view binding
-    var tweetFightModel = new TweetFightViewModel();
-    ko.applyBindings(tweetFightModel);
-
-
-    //Twitter search api helper
-    function TwitterSearchHelper() {
-        var self = this;
-        self.getNextPageHelper = new RegExp(/page=([^&]+)/);
-        self.url = "http://search.twitter.com/search.json?result_type=recent&q=";
-        self.searchTerm;
-        self.startPageNumber = 1;
-        self.tweetData;
-        self.totalTweets;
-        self.oldestTweetDate;
-        self.loading;
-
-        //Main function gather search term, and the reference to the total tweets and oldest date. 
-        self.getTotalTweets = function (searchTermIn, totalTweetsRef, oldestTweetDateRef, loadingRef) {
-
-            self.searchTerm = searchTermIn;
-            self.totalTweets = totalTweetsRef;
-            self.oldestTweetDate = oldestTweetDateRef;
-            self.loading = loadingRef;
-
-            //go ahead and get the total tweets for page 1.  
-            self.getTotalTweetsPerPage(self.startPageNumber);
-
-            return;
-        };
-
-        self.getTotalTweetsPerPage = function (pageNumber) {
-            //this get's the tweets per page. It is a recursive function. 
-
-            $.getJSON(self.url + self.searchTerm + '&rpp=' + numberPerPage + '&page=' + pageNumber + '&callback=?',
-              function (tweetData) {
-                  if (tweetData.results != null && tweetData.results.length != 0 && pageNumber <= maxPageNumber) {
-                      //Parse the results of the tweet stream. 
-                      self.parseTweetData(tweetData);
-                  }
-                  else {
-                      //no more data, all done. 
-                      self.loading(false);
-                      return;
-                  }
-              }
-            );
-        }
-
-        self.parseTweetData = function (tweetData) {
-            var currentTweets = tweetData.results;
-            self.totalTweets(self.totalTweets() + currentTweets.length);
-
-            //get oldest date
-            for (var i = 0; i < currentTweets.length - 1; i++) {
-                var tweetDate = currentTweets[i].created_at;
-
-                if (tweetDate != null) {
-                    var currentTweetDate = new Date(Date.parse(tweetDate));
-
-                    //compare to existing oldest date
-                    if (currentTweetDate.getTime() < self.oldestTweetDate().getTime()) {
-                        self.oldestTweetDate(currentTweetDate);
-                    }
-                }
-            }
-
-            var nextPageData = self.getNextPageHelper.exec(tweetData.next_page);
-            if (nextPageData == null) {
-                //no more pages, moving on
-                self.loading(false);
-                return;
-            }
-            var nextPageNumber = nextPageData[1];
-            self.getTotalTweetsPerPage(nextPageNumber);
-        }
-    }
-
-    //Realtime Communication via SignalR
-    var clipHub; //holds global reference to our SignalR hub
-    $(document).ready(function () {
-        // Proxy created on the fly based on the script include above. 
-        $.connection.hub.logging = true; 
-
-        clipHub = $.connection.tweetFightHub;
-
-        // Declare a function on the chat hub so the server can invoke it          
-        clipHub.client.newFightEntry = function (newTweetFight) {
-            //add to knockout array
-            var viewModel = ko.mapping.fromJS(newTweetFight);
-
-            tweetFightModel.fightHistory.push(viewModel);
-            //alert(newTweetFight);
-        };
-
-        $.connection.hub.start()
-            .fail(function () {
-                alert("Could not connect to backend storage!");
-            });
-    });
-
-    //helper function
-    function isBlank(str) {
-        return (!str || /^\s*$/.test(str));
-    }
- </script>
+        </tbody>
+    </table>
+</div>

@@ -7,30 +7,18 @@ using TweetFighter.Models;
 
 namespace TweetFighter.ApplicationCode
 {
+    //This is the responsitory to handle all of the mongodb connectivity. 
     public class TweetFightRepository : MongoRepository<TweetFight>
     {
-        public List<TweetFight> GetFights()
-        {
-            var fights = this.All();
 
-            if (fights != null)
-            {
-                return fights.ToList<TweetFight>();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public List<TweetFight> GetFightsDescending(int howMany)
+        //Get the last N number of previous fights. 
+        public List<TweetFight> GetPreviousFightsDescending(int howMany)
         {
             var clips = this.All();
 
             if (clips != null)
             {
-                //return clips.OrderByDescending(c => c.dateSubmitted).Take(howMany).ToList<TweetFight>();
-                return null ;
+                return clips.OrderByDescending(c => c.dateSubmitted).Take(howMany).ToList<TweetFight>();
             }
             else
             {
