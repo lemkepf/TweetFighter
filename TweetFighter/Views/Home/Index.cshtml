@@ -53,7 +53,7 @@
         
     <div class="row-fluid">
         <div class="span12 centerAlign">
-            <button type="submit" data-bind="click: compareTerms" class="btn btn-primary btn-xlarge">Fight!</button>
+            <button type="submit" data-bind="click: compareTerms, enable: firstEntry().loading() == false && secondEntry().loading() == false" class="btn btn-primary btn-xlarge">Fight!</button>
         </div>
     </div>
              
