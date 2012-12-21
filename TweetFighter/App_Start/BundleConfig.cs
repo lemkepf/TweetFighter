@@ -8,14 +8,13 @@ namespace TweetFighter
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"
-                        , "~/Scripts/tweetFighter.js",
+            bundles.Add(new ScriptBundle("~/bundles/all").Include(
                         "~/Scripts/knockout-{version}.js",
                         "~/Scripts/knockout.mapping-latest.js",
                         "~/Scripts/jquery.signalR-1.0.0-rc1.js",
                         "~/Scripts/jquery.flot.js",
-                        "~/Scripts/jquery.flot.resize.js"
+                        "~/Scripts/jquery.flot.resize.js",
+                        "~/Scripts/tweetFighter.js"
                         ));
 
             BundleTable.Bundles.Add(new StyleBundle("~/Content/site").Include("~/Content/site.css"));

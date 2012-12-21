@@ -70,7 +70,7 @@ $(document).ready(function () {
     //This is our main view model. It holds all the important information. 
     var TweetFightViewModel = function () {
         var self = this;
-        self.firstEntry = ko.observable(new FightEntry("test"));
+        self.firstEntry = ko.observable(new FightEntry("openshift")); //set some default terms
         self.secondEntry = ko.observable(new FightEntry("azure"));
         self.dateSubmitted = new Date();
         self.fightHistory = ko.observableArray();
@@ -185,7 +185,7 @@ $(document).ready(function () {
                     }
 
                 ], graphOptions);
-            }
+            };
 
             self.addToHistory = function () {
                 //save for postarity using SignalR. 
@@ -194,13 +194,13 @@ $(document).ready(function () {
                 var viewModelInJson = ko.toJSON(this);
                 viewModelInJson = jQuery.parseJSON(viewModelInJson)
                 clipHub.server.addFightEntry(viewModelInJson);
-            }
+            };
 
             self.sortHistory = function (a, b) {
                 a = new Date(a.dateSubmitted());
                 b = new Date(b.dateSubmitted());
                 return a > b ? -1 : a < b ? 1 : 0;
-            }
+            };
         }
     }
 
@@ -296,7 +296,7 @@ function TwitterSearchHelper() {
               }
           }
         );
-    }
+    };
 
     self.parseTweetData = function (tweetData) {
         var currentTweets = tweetData.results;
@@ -324,5 +324,5 @@ function TwitterSearchHelper() {
         }
         var nextPageNumber = nextPageData[1];
         self.getTotalTweetsPerPage(nextPageNumber);
-    }
+    };
 }
