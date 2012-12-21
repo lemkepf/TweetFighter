@@ -13,7 +13,6 @@ namespace TweetFighter
                         "~/Scripts/knockout.mapping-latest.js",
                         "~/Scripts/jquery.signalR-1.0.0-rc1.js",
                         "~/Scripts/jquery.flot.js",
-                        "~/Scripts/jquery.flot.resize.js",
                         "~/Scripts/tweetFighter.js"
                         ));
 
